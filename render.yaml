@@ -4,21 +4,24 @@ services:
     env: java
     plan: free
     buildCommand: "./mvnw clean install"
-    startCommand: "java -jar target/*.jar"
+    startCommand: "java -jar target/product-service-0.0.1-SNAPSHOT.jar"
     envVars:
-      - key: DATABASE_URL
+      - key: SPRING_DATASOURCE_URL
         fromDatabase:
           name: product-db
           property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: product-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: product-db
+          property: password
     autoDeploy: true
     healthCheckPath: "/swagger-ui.html"
-    regions:
-      - oregon
 
 databases:
   - name: product-db
     plan: free
     region: oregon
-    postgresVersion: 13
-    initialScript:
-      - "CREATE SCHEMA IF NOT EXISTS public;"
